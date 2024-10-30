@@ -1,0 +1,8 @@
+Posso criar uma model, migration e uma controller dessa forma:
+php artisan make:model --migration --controller --resource 3
+ou abreviado:
+php artisan make:model -mcr Modelo
+ou
+php artisan make:model --all Carro  Obs: nesse caso é criado a seed e factory também. Abreviado seria com abaixo
+ou abreviado:
+php artisan make:model --a Cliente
