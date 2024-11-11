@@ -6,3 +6,6 @@ ou
 php artisan make:model --all Carro  Obs: nesse caso é criado a seed e factory também. Abreviado seria com abaixo
 ou abreviado:
 php artisan make:model --a Cliente
+
+# Para criar um link simbolico e replicar a pasta imagens em public
+php artisan storage:link

@@ -40,14 +40,16 @@ class MarcaController extends Controller
         // Como está sendo feita uma validação é necessário no headers do postman mandar a chama Accept e value application/json
         $request->validate($this->marca->rules(), $this->marca->feedback());
         // stateless
-
         // dd($request->nome);
         // dd($request->get('nome'));
         // dd($request->input('nome'));
-
         // dd($request->imagem);
-        dd($request->file('imagem'));
-        // $marca = $this->marca->create($request->all());
+        $imagem = $request->file('imagem');
+        $imagem_urn = $imagem->store('imagens', 'public');
+        $marca = $this->marca->create([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        ]);
         return response()->json($marca, 201);
     }
 
