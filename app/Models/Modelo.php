@@ -22,6 +22,9 @@ class Modelo extends Model
             'air_bag' => 'required|boolean',
             'abs' => 'required|boolean' // true, false, 1, 0, "1", "0"
         ];
+    }
 
+    public function marca(){
+        return $this->belongsTo('App\Models\Marca');
     }
 }
