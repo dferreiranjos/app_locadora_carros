@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use App\Models\Modelo;
+use Hamcrest\Core\HasToString;
 use Illuminate\Http\Request;
 
 class ModeloController extends Controller
@@ -26,13 +27,21 @@ class ModeloController extends Controller
 
         $modelos = array();
 
+        if($request->has('atributos_marca')){
+            $atributos_marca = $request->atributos_marca;
+            $modelos =  $this->modelo->with('marca:id,'.$atributos_marca);
+        }else{
+            $modelos = $this->modelo->with('marca');
+        }
+
         if($request->has('atributos')){
             $atributos = $request->atributos;
             // $modelos = $this->modelo->select('id', 'nome', 'imagem')->get();
-            $modelos = $this->modelo->selectRaw($atributos)->with('marca')->get();
+            $modelos = $modelos->selectRaw($atributos)->get();
         }else{
-            $modelos = $this->modelo->with('marca')->get();
+            $modelos = $modelos->get();
         }
+        // dd($modelos->toSql(), $modelos->getBindings()); // só funciona se tirar os get()
 
         return response()->json($modelos, 200);
     }
