@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use App\Models\Modelo;
+use App\Repositories\ModeloRepository;
 use Hamcrest\Core\HasToString;
 use Illuminate\Http\Request;
 
@@ -21,40 +22,24 @@ class ModeloController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->get('atributos'));
-        // dd($request->atributos);
-        // return response()->json($this->modelo->with('marca')->get(), 200);
-
-        $modelos = array();
+        $modeloRepository = new ModeloRepository($this->modelo);
 
         if($request->has('atributos_marca')){
-            $atributos_marca = $request->atributos_marca;
-            $modelos =  $this->modelo->with('marca:id,'.$atributos_marca);
+            $atributos_marca = 'marca:id,'.$request->atributos_marca;
+            $modeloRepository->selectAtributosRegistrosRelacionados($atributos_marca);
         }else{
-            $modelos = $this->modelo->with('marca');
+            $modeloRepository->selectAtributosRegistrosRelacionados('marca');
         }
 
         if($request->has('filtro')){
-            // dd(explode(":",$request->filtro));
-            // dd($request->filtro);
-            $filtros = explode(';', $request->filtro);
-            // dd($filtros);
-            foreach($filtros as $key => $condicao){
-                $c = explode(':', $condicao);
-                $modelos = $modelos->where($c[0], $c[1], $c[2]);
-            }
+            $modeloRepository->filtro($request->filtro);
         }
 
         if($request->has('atributos')){
-            $atributos = $request->atributos;
-            // $modelos = $this->modelo->select('id', 'nome', 'imagem')->get();
-            $modelos = $modelos->selectRaw($atributos)->get();
-        }else{
-            $modelos = $modelos->get();
+            $modeloRepository->selectAtributos($request->atributos);
         }
-        // dd($modelos->toSql(), $modelos->getBindings()); // só funciona se tirar os get()
 
-        return response()->json($modelos, 200);
+        return response()->json($modeloRepository->getResultado(), 200);
     }
 
     /**
