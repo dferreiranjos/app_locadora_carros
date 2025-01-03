@@ -12,3 +12,13 @@ php artisan storage:link
 
 # Para instalar o pacote jwt
 composer require tymon/jwt-auth "1.0.2" obs: não consegui instalar a versão 1.0.2 pois o php instalado é superior
+
+# Inserir um usuário usando o tinker
+php artisan tinker
+
+$user = new App\Models\User();
+$user->name = 'Daniel';
+$user->email = 'daniel@teste.com.br';
+$user->password = bcrypt('1234');
+var_dump($user->getAttributes());
+$user->save();
