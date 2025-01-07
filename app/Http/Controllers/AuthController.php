@@ -35,6 +35,7 @@ class AuthController extends Controller
 
     public function me()
     {
-        return 'me';
+        // dd(auth()->user()); //aqui o password é apresentado
+        return response()->json(auth()->user()); //aqui o password NÃO é apresentado
     }
 }
